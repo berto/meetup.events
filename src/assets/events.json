@@ -1,0 +1,42 @@
+[
+  {
+    "image": "https://www.visualstudio.com/wp-content/uploads/2016/06/Nodejs-2-562x309@2x-op.png",
+    "url": "https://www.meetup.com/Node-js-Denver-Boulder/events/240482998/",
+    "title": "Node.js Denver/Boulder/Ft. Collins",
+    "address": "3412 Blake St, Denver, CO",
+    "location-name": "Code Talent",
+    "start-time": "6:30 PM",
+    "end-time": "8:00 PM",
+    "price": ""
+  },
+  {
+    "image": "https://secure.meetupstatic.com/photos/event/9/2/f/f/global_459337631.jpeg",
+    "url": "https://www.meetup.com/Denver-Go-Language-User-Group/events/240060881/",
+    "title": "Denver Gophers",
+    "address": "1550 Wewatta Street, Denver, CO",
+    "location-name": "WeWork Union Station",
+    "start-time": "5:30 PM",
+    "end-time": "8:30 PM",
+    "price": ""
+  },
+  {
+    "image": "https://secure.meetupstatic.com/photos/event/e/6/3/f/global_449218943.jpeg",
+    "url": "https://www.meetup.com/Denver-Friendship-One/events/240873489/",
+    "title": "Hazel Miller Band",
+    "address": "",
+    "location-name": "This location is shown only to members",
+    "start-time": "5:30 PM",
+    "end-time": "",
+    "price": ""
+  },
+  {
+    "image": "",
+    "url": "https://www.meetup.com/HeartMindSpiritRecoverySpiritualityInRecovery/events/240831296/",
+    "title": "Heart, Mind & Spirit Recovery's Spirituality in Recovery - Meeting",
+    "address": "9077 W Alameda Ave.  (Garden Level Meeting Room) Lakewood, CO",
+    "location-name": "Mile Hi Church",
+    "start-time": "6:00 PM",
+    "end-time": "7:00 PM",
+    "price": "10"
+  }
+]
