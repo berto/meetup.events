@@ -7,12 +7,12 @@ export default {
   name: 'authorize',
   created() {
     const token = this.$route.query.token;
-    let route = 'Login';
     if (token) {
       localStorage.setItem('session', token);
-      route = '/';
+      location.href = '/';
+    } else {
+      this.$router.push('Login');
     }
-    this.$router.push(route);
   },
 };
 </script>

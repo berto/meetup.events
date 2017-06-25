@@ -11,7 +11,8 @@
                 <li><router-link to="/">Today</router-link></li>
                 <li><router-link to="/upcoming">Upcoming</router-link></li>
                 <li><router-link to="/add">Add Event</router-link></li>
-                <li><router-link to="/login">Login</router-link></li>
+                <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
+                <li v-if="isLoggedIn" v-on:click="logout"><a>Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -22,6 +23,24 @@
 <script>
 export default {
   name: 'app',
+  data() {
+    return {
+      isLoggedIn: false,
+    };
+  },
+  created() {
+    const token = localStorage.getItem('session');
+    if (token) {
+      this.isLoggedIn = true;
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('session');
+      this.$forceUpdate();
+      this.$router.go('/');
+    },
+  },
 };
 </script>
 
