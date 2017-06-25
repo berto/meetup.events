@@ -1,27 +1,37 @@
 <template>
   <div class="uk-container">
-    <div class="uk-grid-collapse uk-child-width-1-1 uk-text-center" v-for="event in events" uk-grid>    
-      <div class="uk-card uk-card-hover uk-card-body">
-        <div class="uk-card-header">
-            <div class="uk-grid-small uk-flex-middle" uk-grid>
-                <div class="uk-card-media-left uk-cover-container">
-                    <img v-bind:src="event.image">
-                </div>
-                <div class="uk-width-expand">
-                    <h3 class="uk-card-title uk-margin-remove-bottom">
-                      <a target="_blank" v-bind:href="event.url">
-                        {{event.title}}
-                      </a>
-                    </h3>
-                    <p class="uk-text-meta location uk-margin-remove-top">{{event['location-name']}}</p>
-                    <p class="uk-text-meta uk-margin-remove-top">{{event.address}}</p>
-                    <p class="uk-text-meta uk-margin-remove-top">{{event.time}}</p>
-                </div>
-                <div class="uk-width-auto">
-                  {{event.priceLabel}} 
-                </div>
-            </div>
+    <div class="uk-card uk-card-default uk-animation-slide-left-small uk-width-1-1@s uk-width-1-2@m" v-for="(event, index) in events" uk-grid>    
+      <div class="uk-card-header">
+        <div class="uk-grid-small uk-flex-middle" uk-grid>
+          <div class="uk-width-auto">
+            <img class="uk-border-circle" width="40" height="40" v-bind:src="event.image">
+          </div>
+          <div class="uk-width-expand">
+            <h3 class="uk-card-title uk-margin-remove-bottom">
+              <a v-bind:href="event.url" target="_blank">
+                {{event.title}}
+              </a>
+            </h3>
+            <p class="uk-text-meta uk-margin-remove-top">
+              <time datetime="2016-04-01T19:00">{{event.time | moment("dddd, MMMM Do YYYY")}}</time>
+            </p>
+          </div>
         </div>
+        <div class="uk-grid-small uk-flex-middle" uk-grid>
+          {{event.price}}
+        </div>
+      </div>
+      <div class="uk-card-body">
+        <p class="location">{{event.location_name}}</p>
+        <p>{{event.address}}</p>
+      </div>
+      <div class="uk-card-footer">
+        <a href="#" v-bind:uk-toggle="`target: #${index}`" class="uk-button uk-button-text">Description</a>
+      </div>
+      <div v-bind:id="index" uk-modal>
+         <div class="uk-modal-dialog uk-modal-body">
+           <p> {{event.description }} </p>
+         </div>
       </div>
     </div>
   </div>
