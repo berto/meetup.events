@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Main from '@/components/Main';
-import Add from '@/components/Add';
+import Events from '@/components/Events';
 import Upcoming from '@/components/Upcoming';
+import Add from '@/components/Add';
 import Login from '@/components/Login';
 import Authorize from '@/components/Authorize';
 
@@ -12,13 +12,15 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Main',
-      component: Main,
+      name: 'Today',
+      component: Events,
+      canReuse: false,
     },
     {
       path: '/upcoming',
       name: 'Upcoming',
       component: Upcoming,
+      canReuse: false,
     },
     {
       path: '/add',

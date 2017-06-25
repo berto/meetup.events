@@ -49,14 +49,14 @@
 import cleanEvents from '../lib/utils';
 
 export default {
-  name: 'upcoming',
+  name: 'today',
   data() {
     return {
       events: [],
     };
   },
   created() {
-    const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/upcoming';
+    const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
     fetch(url)
       .then(data => data.json())
       .then((events) => {

@@ -37,8 +37,8 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem('session');
-      this.$forceUpdate();
       this.$router.go('/');
+      this.$forceUpdate();
     },
   },
 };

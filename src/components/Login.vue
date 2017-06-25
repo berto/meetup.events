@@ -23,24 +23,31 @@ export default {
   methods: {
     login() {
       const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/auth/login';
+      const settings = this.createSettings();
+      fetch(url, settings)
+        .then(data => data.json())
+        .then(this.handleToken)
+        .catch(this.handleError);
+    },
+    createSettings() {
       const form = `${encodeURIComponent('password')}=${encodeURIComponent(this.password)}`;
-      const settings = {
+      return {
         method: 'Post',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: form,
       };
-      fetch(url, settings).then(data => data.json())
-        .then((response) => {
-          if (response.token) {
-            this.$router.push({ path: 'authorize', query: response });
-          } else {
-            this.error = true;
-          }
-        }).catch(() => {
-          this.error = true;
-        });
+    },
+    handleToken(response) {
+      if (response.token) {
+        this.$router.push({ path: 'authorize', query: response });
+      } else {
+        this.error = true;
+      }
+    },
+    handleError() {
+      this.error = true;
     },
   },
 };
