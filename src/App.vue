@@ -8,9 +8,10 @@
         </div>
         <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
-                <li><router-link to="/">Day</router-link></li>
-                <li><router-link to="/all">All</router-link></li>
+                <li><router-link to="/">Today</router-link></li>
+                <li><router-link to="/upcoming">Upcoming</router-link></li>
                 <li><router-link to="/add">Add Event</router-link></li>
+                <li><router-link to="/login">Login</router-link></li>
             </ul>
         </div>
     </nav>

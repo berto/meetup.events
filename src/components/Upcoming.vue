@@ -32,7 +32,7 @@ import events from '../assets/events.json';
 import cleanEvents from '../lib/utils';
 
 export default {
-  name: 'main',
+  name: 'upcoming',
   data() {
     return {
       events: [],
