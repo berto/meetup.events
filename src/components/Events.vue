@@ -25,6 +25,7 @@
             </div>
           </div>
           <div class="uk-grid-small uk-flex-middle" uk-grid>
+            <button v-if="isLoggedIn" v-on:click="deleteEvent(event._id)" class="uk-button uk-button-danger">Delete</button>
             {{event.price}}
           </div>
         </div>
@@ -46,6 +47,7 @@
 </template>
 
 <script>
+/* eslint-disable no-underscore-dangle */
 import cleanEvents from '../lib/utils';
 import cat from '../assets/cat.gif';
 
@@ -54,20 +56,51 @@ export default {
   data() {
     return {
       events: [],
+      isLoggedIn: false,
     };
   },
   created() {
-    const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
-    fetch(url)
-      .then(data => data.json())
-      .then(this.handleEvents);
+    this.authorize();
+    this.getEvents();
   },
   methods: {
+    authorize() {
+      const token = localStorage.getItem('session');
+      if (token) {
+        this.isLoggedIn = true;
+      }
+    },
+    getEvents() {
+      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
+      fetch(url)
+        .then(data => data.json())
+        .then(this.handleEvents);
+    },
     handleEvents(events) {
       this.events = cleanEvents(events);
       if (this.events.length === 0) {
         this.displayPlaceholder();
       }
+    },
+    createSettings(method) {
+      const token = localStorage.getItem('session');
+      return {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+    },
+    deleteEvent(id) {
+      const url = `https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/${id}`;
+      const method = 'Delete';
+      const settings = this.createSettings(method);
+      fetch(url, settings)
+        .then(data => data.json())
+        .then(response => this.removeEvent(response._id));
+    },
+    removeEvent(id) {
+      this.events = this.events.filter(event => event._id !== id);
     },
     displayPlaceholder() {
       const mainElement = document.querySelector('.main');

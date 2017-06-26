@@ -8,6 +8,8 @@
           <input class="uk-input" type="url" v-model="meetup_url" name="meetup_url" placeholder="https://www.meetup.com/<meetup-group>/events/<event-id>/" required>
         </div>
         <button class="uk-button uk-button-default">Submit Event</button>
+        <span v-if="submitted">Thank you for your suggestion!</span>
+        <span v-if="added">Event Added!</span>
       </fieldset>
     </form>
     <hr class="uk-divider-icon">
@@ -65,6 +67,8 @@ export default {
       start_time: '',
       end_time: '',
       price: '',
+      submitted: false,
+      added: false,
     };
   },
   methods: {
@@ -76,8 +80,13 @@ export default {
       const settings = this.createSettings();
       fetch(url, settings)
         .then(data => data.json())
-        .then(() => {
-          this.$router.push({ path: '/' });
+        .then((response) => {
+          this.meetup_url = '';
+          if (response.pending) {
+            this.submitted = true;
+          } else {
+            this.added = true;
+          }
         });
     },
     createSettings() {

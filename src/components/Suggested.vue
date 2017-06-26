@@ -25,6 +25,8 @@
             </div>
           </div>
           <div class="uk-grid-small uk-flex-middle" uk-grid>
+            <button v-on:click="approveEvent(event._id)" class="uk-button uk-button-primary">Approve</button>
+            <button v-on:click="deleteEvent(event._id)" class="uk-button uk-button-danger">Delete</button>
             {{event.price}}
           </div>
         </div>
@@ -46,6 +48,7 @@
 </template>
 
 <script>
+/* eslint-disable no-underscore-dangle */
 import cat from '../assets/cat.gif';
 
 export default {
@@ -53,14 +56,12 @@ export default {
   data() {
     return {
       events: [],
+      allEvents: false,
     };
   },
   created() {
     this.authorize();
-    const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
-    fetch(url)
-      .then(data => data.json())
-      .then(this.handleEvents);
+    this.getAllEvents();
   },
   methods: {
     authorize() {
@@ -69,8 +70,54 @@ export default {
         this.$router.push({ path: '/' });
       }
     },
+    getAllEvents() {
+      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
+      this.allEvents = false;
+      fetch(url)
+        .then(data => data.json())
+        .then(this.handleEvents)
+        .then(this.getUpcomingEvents)
+        .then(data => data.json())
+        .then(this.handleEvents);
+    },
+    approveEvent(id) {
+      const url = `https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/${id}/approve`;
+      const method = 'Post';
+      const settings = this.createSettings(method);
+      fetch(url, settings)
+        .then(data => data.json())
+        .then(response => this.removeEvent(response._id));
+    },
+    deleteEvent(id) {
+      const url = `https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/${id}`;
+      const method = 'Delete';
+      const settings = this.createSettings(method);
+      fetch(url, settings)
+        .then(data => data.json())
+        .then(response => this.removeEvent(response._id));
+    },
+    createSettings(method) {
+      const token = localStorage.getItem('session');
+      return {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+    },
+    removeEvent(id) {
+      this.events = this.events.filter(event => event._id !== id);
+    },
+    getUpcomingEvents() {
+      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/upcoming';
+      this.allEvents = true;
+      return fetch(url);
+    },
     handleEvents(events) {
-      this.events = events;
+      this.events = [...this.events, ...events].filter(event => event.pending);
+      if (this.events.length === 0 && this.allEvents) {
+        this.displayPlaceholder();
+      }
     },
     displayPlaceholder() {
       const mainElement = document.querySelector('.main');
@@ -100,7 +147,10 @@ p {
 }
 .uk-card {
   margin-top: 1em;
-  height: 50vh;
+  height: 70vh;
   overflow: scroll;
+}
+.right {
+  float: right;
 }
 </style>
