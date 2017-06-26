@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import cleanEvents from '../lib/utils';
 import cat from '../assets/cat.gif';
 
 export default {
@@ -57,17 +56,21 @@ export default {
     };
   },
   created() {
+    this.authorize();
     const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
     fetch(url)
       .then(data => data.json())
       .then(this.handleEvents);
   },
   methods: {
-    handleEvents(events) {
-      this.events = cleanEvents(events);
-      if (this.events.length === 0) {
-        this.displayPlaceholder();
+    authorize() {
+      const token = localStorage.getItem('session');
+      if (!token) {
+        this.$router.push({ path: '/' });
       }
+    },
+    handleEvents(events) {
+      this.events = events;
     },
     displayPlaceholder() {
       const mainElement = document.querySelector('.main');
@@ -77,7 +80,7 @@ export default {
       mainElement.style.backgroundImage = `url(${cat})`;
       mainElement.style.backgroundSize = 'cover';
       mainElement.style.margin = '0';
-      mainElement.innerHTML = '<h1> No Events Today </h1>';
+      mainElement.innerHTML = '<h1> No Suggested Events </h1>';
     },
   },
 };

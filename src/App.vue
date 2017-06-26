@@ -11,6 +11,7 @@
                 <li><router-link to="/">Today</router-link></li>
                 <li><router-link to="/upcoming">Upcoming</router-link></li>
                 <li><router-link to="/add">Add Event</router-link></li>
+                <li v-if="isLoggedIn"><router-link to="/suggested">Suggested</router-link></li>
                 <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
                 <li v-if="isLoggedIn" v-on:click="logout"><a>Logout</a></li>
             </ul>
