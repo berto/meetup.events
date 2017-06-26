@@ -49,7 +49,7 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import cat from '../assets/cat.gif';
+import placeholder from '../assets/placeholder.gif';
 
 export default {
   name: 'today',
@@ -124,7 +124,7 @@ export default {
       mainElement.style.display = 'block';
       mainElement.style.width = '100vw';
       mainElement.style.height = '100vh';
-      mainElement.style.backgroundImage = `url(${cat})`;
+      mainElement.style.backgroundImage = `url(${placeholder})`;
       mainElement.style.backgroundSize = 'cover';
       mainElement.style.margin = '0';
       mainElement.innerHTML = '<h1> No Suggested Events </h1>';

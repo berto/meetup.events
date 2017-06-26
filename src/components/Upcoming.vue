@@ -49,6 +49,7 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 import cleanEvents from '../lib/utils';
+import placeholder from '../assets/placeholder.gif';
 
 export default {
   name: 'upcoming',
@@ -75,6 +76,9 @@ export default {
         .then(data => data.json())
         .then((events) => {
           this.events = cleanEvents(events);
+          if (this.events.length === 0) {
+            this.displayPlaceholder();
+          }
         });
     },
     deleteEvent(id) {
@@ -97,6 +101,16 @@ export default {
         },
       };
     },
+    displayPlaceholder() {
+      const mainElement = document.querySelector('.main');
+      mainElement.style.display = 'block';
+      mainElement.style.width = '100vw';
+      mainElement.style.height = '100vh';
+      mainElement.style.backgroundImage = `url(${placeholder})`;
+      mainElement.style.backgroundSize = 'cover';
+      mainElement.style.margin = '0';
+      mainElement.innerHTML = '<h1> No Upcoming Events </h1>';
+    },
   },
 };
 
@@ -115,7 +129,7 @@ p {
 }
 .uk-card {
   margin-top: 1em;
-  height: 50vh;
+  height: 70vh;
   overflow: scroll;
 }
 </style>
