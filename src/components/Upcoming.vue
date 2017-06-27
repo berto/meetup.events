@@ -71,7 +71,7 @@ export default {
       }
     },
     getUpcomingEvents() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/upcoming';
+      const url = 'https://api.meetup.events/api/v1/events/upcoming';
       fetch(url)
         .then(data => data.json())
         .then((events) => {
@@ -82,7 +82,7 @@ export default {
         });
     },
     deleteEvent(id) {
-      const url = `https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/${id}`;
+      const url = `https://api.meetup.events/api/v1/events/${id}`;
       const method = 'Delete';
       const settings = this.createSettings(method);
       fetch(url, settings)

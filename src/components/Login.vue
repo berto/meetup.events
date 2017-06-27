@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     login() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/auth/login';
+      const url = 'https://api.meetup.events/auth/login';
       const settings = this.createSettings();
       fetch(url, settings)
         .then(data => data.json())

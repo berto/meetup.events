@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     addEvent() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
+      const url = 'https://api.meetup.events/api/v1/events';
       const form = this.createForm();
       const settings = this.createSettings(form);
       fetch(url, settings)
@@ -115,7 +115,7 @@ export default {
       }
     },
     addEventURL() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/url';
+      const url = 'https://api.meetup.events/api/v1/events/url';
       const form = `${encodeURIComponent('url')}=${encodeURIComponent(this.meetup_url)}`;
       const settings = this.createSettings(form);
       fetch(url, settings)
