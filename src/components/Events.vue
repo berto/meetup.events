@@ -30,6 +30,7 @@
           </div>
         </div>
         <div class="uk-card-body">
+          <p v-if="event.meetup_name">{{event.meetup_name}}</p>
           <p class="location">{{event.location_name ? event.location_name : "No Location Provided"}}</p>
           <p>{{event.address}}</p>
         </div>
