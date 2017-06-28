@@ -20,7 +20,7 @@
           <input class="uk-input" type="text" v-model="title" name="title" placeholder="Title" required>
         </div>
         <div class="uk-margin">
-          <input class="uk-input" type="url" v-model="url" name="url" placeholder="Event URL">
+          <input class="uk-input" type="url" v-model="url" name="url" placeholder="Event URL" required>
         </div>
         <div class="uk-margin">
           <input class="uk-input" type="url" v-model="image" name="image-url" placeholder="Image URL">
@@ -55,6 +55,9 @@
 
 <script>
 /* eslint-disable no-restricted-syntax */
+import moment from 'moment';
+import Events from '../lib/Events';
+
 const urlForm = {
   meetup_url: '',
 };
@@ -77,6 +80,8 @@ const messages = {
   addedEvent: false,
 };
 
+const offset = new Date().getTimezoneOffset() / 60;
+
 export default {
   name: 'addEvent',
   data() {
@@ -84,11 +89,12 @@ export default {
   },
   methods: {
     addEvent() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
-      const form = this.createForm();
-      const settings = this.createSettings(form);
-      fetch(url, settings)
-        .then(data => data.json())
+      const event = this.getEvent();
+      event.start_time = moment.utc(`${event.date} ${event.start_time}`).add(offset, 'hours').toISOString();
+      event.end_time = moment.utc(`${event.date} ${event.end_time}`).add(offset, 'hours').toISOString();
+      event.date = moment.utc(event.date).add(offset, 'hours').toISOString();
+      Events
+        .create(event)
         .then((response) => {
           this.clearForm();
           if (response.pending) {
@@ -98,14 +104,15 @@ export default {
           }
         });
     },
-    createForm() {
-      const form = [];
+    getEvent() {
+      const event = {};
       for (const key in eventForm) {
         if (Object.prototype.hasOwnProperty.call(eventForm, key)) {
-          form.push(`${encodeURIComponent(key)}=${encodeURIComponent(this[key])}`);
+          event[key] = this[key];
         }
       }
-      return form.join('&');
+
+      return event;
     },
     clearForm() {
       for (const key in eventForm) {
@@ -115,11 +122,8 @@ export default {
       }
     },
     addEventURL() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/url';
-      const form = `${encodeURIComponent('url')}=${encodeURIComponent(this.meetup_url)}`;
-      const settings = this.createSettings(form);
-      fetch(url, settings)
-        .then(data => data.json())
+      Events
+        .createURL(this.meetup_url)
         .then((response) => {
           this.meetup_url = '';
           if (response.pending) {
@@ -128,17 +132,6 @@ export default {
             this.addedUrl = true;
           }
         });
-    },
-    createSettings(body) {
-      const token = localStorage.getItem('session');
-      return {
-        method: 'Post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Bearer ${token}`,
-        },
-        body,
-      };
     },
   },
 };

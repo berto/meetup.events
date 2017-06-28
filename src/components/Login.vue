@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import Events from '../lib/Events';
+
 export default {
   name: 'login',
   data() {
@@ -22,22 +24,10 @@ export default {
   },
   methods: {
     login() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/auth/login';
-      const settings = this.createSettings();
-      fetch(url, settings)
-        .then(data => data.json())
+      Events
+        .login(this.password)
         .then(this.handleToken)
         .catch(this.handleError);
-    },
-    createSettings() {
-      const form = `${encodeURIComponent('password')}=${encodeURIComponent(this.password)}`;
-      return {
-        method: 'Post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: form,
-      };
     },
     handleToken(response) {
       if (response.token) {

@@ -1,7 +1,7 @@
 <template>
   <div class="main" uk-grid>
-    <div class="uk-animation-slide-left-small uk-width-1-1@s uk-width-1-3@l uk-width-1-2@m" v-for="(event, index) in events">    
-      <div class="uk-card uk-card-default">    
+    <div class="uk-animation-slide-left-small uk-width-1-1@s uk-width-1-3@l uk-width-1-2@m" v-for="(event, index) in events">
+      <div class="uk-card uk-card-default">
         <div class="uk-card-header">
           <div class="uk-grid-small uk-flex-middle" uk-grid>
             <div class="uk-width-auto">
@@ -19,7 +19,7 @@
                 <br>
                 {{event.start_time | moment("h:mm a")}}
                 {{event.end_time ? "-" : "" }}
-                {{event.end_time | moment("h:mm a") }} 
+                {{event.end_time | moment("h:mm a") }}
               </time>
               </p>
             </div>
@@ -49,6 +49,7 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
+import Events from '../lib/Events';
 import placeholder from '../assets/placeholder.gif';
 
 export default {
@@ -71,47 +72,29 @@ export default {
       }
     },
     getAllEvents() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events';
       this.allEvents = false;
-      fetch(url)
-        .then(data => data.json())
+      Events
+        .getAll()
         .then(this.handleEvents)
         .then(this.getUpcomingEvents)
-        .then(data => data.json())
         .then(this.handleEvents);
     },
     approveEvent(id) {
-      const url = `https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/${id}/approve`;
-      const method = 'Post';
-      const settings = this.createSettings(method);
-      fetch(url, settings)
-        .then(data => data.json())
+      Events
+        .approve(id)
         .then(response => this.removeEvent(response._id));
     },
     deleteEvent(id) {
-      const url = `https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/${id}`;
-      const method = 'Delete';
-      const settings = this.createSettings(method);
-      fetch(url, settings)
-        .then(data => data.json())
+      Events
+        .destroy(id)
         .then(response => this.removeEvent(response._id));
-    },
-    createSettings(method) {
-      const token = localStorage.getItem('session');
-      return {
-        method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
     },
     removeEvent(id) {
       this.events = this.events.filter(event => event._id !== id);
     },
     getUpcomingEvents() {
-      const url = 'https://cors-anywhere.herokuapp.com/https://api.meetup.events/api/v1/events/upcoming';
       this.allEvents = true;
-      return fetch(url);
+      return Events.getUpcoming();
     },
     handleEvents(events) {
       this.events = [...this.events, ...events].filter(event => event.pending);
