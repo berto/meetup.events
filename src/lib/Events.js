@@ -18,6 +18,7 @@ function getUpcoming() {
 }
 
 function create(event) {
+  console.log(event);
   return postJSON(API_URL, event);
 }
 
