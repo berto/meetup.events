@@ -55,6 +55,8 @@
 
 <script>
 /* eslint-disable no-restricted-syntax */
+import Events from '../lib/Events';
+
 const urlForm = {
   meetup_url: '',
 };
@@ -84,11 +86,8 @@ export default {
   },
   methods: {
     addEvent() {
-      const url = 'https://api.meetup.events/api/v1/events';
-      const form = this.createForm();
-      const settings = this.createSettings(form);
-      fetch(url, settings)
-        .then(data => data.json())
+      Events
+        .create(this.eventForm)
         .then((response) => {
           this.clearForm();
           if (response.pending) {
@@ -98,15 +97,6 @@ export default {
           }
         });
     },
-    createForm() {
-      const form = [];
-      for (const key in eventForm) {
-        if (Object.prototype.hasOwnProperty.call(eventForm, key)) {
-          form.push(`${encodeURIComponent(key)}=${encodeURIComponent(this[key])}`);
-        }
-      }
-      return form.join('&');
-    },
     clearForm() {
       for (const key in eventForm) {
         if (Object.prototype.hasOwnProperty.call(eventForm, key)) {
@@ -115,11 +105,8 @@ export default {
       }
     },
     addEventURL() {
-      const url = 'https://api.meetup.events/api/v1/events/url';
-      const form = `${encodeURIComponent('url')}=${encodeURIComponent(this.meetup_url)}`;
-      const settings = this.createSettings(form);
-      fetch(url, settings)
-        .then(data => data.json())
+      Events
+        .createURL(this.meetup_url)
         .then((response) => {
           this.meetup_url = '';
           if (response.pending) {
@@ -128,17 +115,6 @@ export default {
             this.addedUrl = true;
           }
         });
-    },
-    createSettings(body) {
-      const token = localStorage.getItem('session');
-      return {
-        method: 'Post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Bearer ${token}`,
-        },
-        body,
-      };
     },
   },
 };
